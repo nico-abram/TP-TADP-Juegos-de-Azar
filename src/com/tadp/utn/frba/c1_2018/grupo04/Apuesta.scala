@@ -5,12 +5,11 @@ trait Apuesta {
 }
 case class ApuestaSimple(jugada: Jugada, monto: Double) extends Apuesta {
   def apply(montoInicial: Double): Resultado = {
-    val distribucion = jugada.juego.Distribucion()
-    val (wins: Seq[Suceso], loses: Seq[Suceso]) =
-      distribucion.SucesosPosibles().partition((suceso: Suceso) => jugada.SucesoGanador(suceso))
+    val (wins: Seq[Suceso], losses: Seq[Suceso]) =
+      jugada.ResultadosPosibles().partition((suceso: Suceso) => jugada.SucesoGanador(suceso))
     ResultadoArbol(
-      ResultadoFinal(-monto, loses.map(distribucion.Probabilidad(_)).sum),
-      ResultadoFinal(jugada.Ganancia(monto) - monto, wins.map(distribucion.Probabilidad(_)).sum)) + montoInicial
+      ResultadoFinal(-monto, losses.map(jugada.Probabilidad(_)).sum),
+      ResultadoFinal(jugada.Ganancia(monto) - monto, wins.map(jugada.Probabilidad(_)).sum)) + montoInicial
   }
 }
 case class ApuestaCompuesta(apuestas: Seq[ApuestaSimple]) extends Apuesta {

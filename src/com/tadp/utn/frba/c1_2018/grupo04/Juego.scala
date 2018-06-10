@@ -4,6 +4,8 @@ trait Jugada extends Suceso {
   val juego: Juego
   def Ganancia(monto: Double): Double
   def SucesoGanador(suceso: Suceso) = juego.SucesoGanador(suceso, this)
+  def ResultadosPosibles() = juego.ResultadosPosibles()
+  def Probabilidad(s: Suceso) = juego.Probabilidad(s)
 }
 
 trait Juego {
