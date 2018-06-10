@@ -6,13 +6,13 @@ trait Apuesta {
 case class ApuestaSimple(jugada: Jugada, monto: Double) extends Apuesta {
   def apply(montoInicial: Double): Resultado = {
     val (wins: Seq[Suceso], losses: Seq[Suceso]) =
-      jugada.ResultadosPosibles().partition((suceso: Suceso) => jugada.SucesoGanador(suceso))
+      jugada.resultadosPosibles().partition((suceso: Suceso) => jugada.sucesoGanador(suceso))
     ResultadoArbol(
-      ResultadoFinal(-monto, losses.map(jugada.Probabilidad(_)).sum),
-      ResultadoFinal(jugada.Ganancia(monto) - monto, wins.map(jugada.Probabilidad(_)).sum)) + montoInicial
+      ResultadoFinal(-monto, losses.map(jugada.probabilidad(_)).sum),
+      ResultadoFinal(jugada.ganancia(monto) - monto, wins.map(jugada.probabilidad(_)).sum)) + montoInicial
   }
 }
 case class ApuestaCompuesta(apuestas: Seq[ApuestaSimple]) extends Apuesta {
   def apply(montoInicial: Double): Resultado =
-    apuestas.tail.foldLeft(apuestas.head(montoInicial)) { (r: Resultado, ap: ApuestaSimple) => r.map(ap) }
+    apuestas.tail.foldLeft(apuestas.head(montoInicial)) { (r: Resultado, ap: ApuestaSimple) => r.flatMap(ap) }
 }

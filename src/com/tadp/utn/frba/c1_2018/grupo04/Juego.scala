@@ -2,15 +2,15 @@ package com.tadp.utn.frba.c1_2018.grupo04
 
 trait Jugada extends Suceso {
   val juego: Juego
-  def Ganancia(monto: Double): Double
-  def SucesoGanador(suceso: Suceso) = juego.SucesoGanador(suceso, this)
-  def ResultadosPosibles() = juego.ResultadosPosibles()
-  def Probabilidad(s: Suceso) = juego.Probabilidad(s)
+  def ganancia(monto: Double): Double
+  def sucesoGanador(suceso: Suceso) = juego.sucesoGanador(suceso, this)
+  def resultadosPosibles() = juego.resultadosPosibles()
+  def probabilidad(s: Suceso) = juego.probabilidad(s)
 }
 
 trait Juego {
-  def Distribucion(): Distribucion
-  def ResultadosPosibles() = Distribucion().SucesosPosibles()
-  def Probabilidad(s: Suceso) = Distribucion().Probabilidad(s)
-  def SucesoGanador(suceso: Suceso, resultado: Jugada) = suceso == resultado
+  def distribucion(): Distribucion
+  def resultadosPosibles() = distribucion().SucesosPosibles()
+  def probabilidad(s: Suceso) = distribucion().Probabilidad(s)
+  def sucesoGanador(suceso: Suceso, resultado: Jugada) = suceso == resultado
 }

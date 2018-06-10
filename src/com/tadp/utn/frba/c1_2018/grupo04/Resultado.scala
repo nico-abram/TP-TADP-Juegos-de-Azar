@@ -6,24 +6,23 @@ case class SucesoGanancia(val monto: Double) extends Suceso {
 
 trait Resultado extends Suceso {
   type Apuesta = { def monto: Double; def apply(m: Double): Resultado }
+  def distribucion() = Ponderada(aplanar())
+  def cambiarProba(d:Double):Resultado
   def +(d: Double): Resultado
-  def map(f: Apuesta): Resultado
+  def flatMap(f: Apuesta): Resultado
   def aplanar(): Seq[(SucesoGanancia, Double)]
 }
-case class ResultadoCompuesto(val r: Resultado, val proba: Double) extends Resultado {
-  def +(d: Double): Resultado = ResultadoCompuesto(r + d, proba)
-  def map(f: Apuesta): Resultado = ResultadoCompuesto(r.map(f), proba)
-  def aplanar() = r.aplanar().map((pair) => (pair._1, pair._2 * proba / 100))
-}
 case class ResultadoFinal(val monto: Double, val proba: Double) extends Resultado {
-  def +(d: Double): Resultado = ResultadoFinal(monto + d, proba)
-  def map(f: Apuesta): Resultado =
-    if (f.monto <= monto) ResultadoCompuesto(f(monto), proba)
+  def cambiarProba(d:Double) = ResultadoFinal(monto, d)
+  def +(d: Double)= ResultadoFinal(monto + d, proba)
+  def flatMap(f: Apuesta): Resultado =
+    if (f.monto <= monto) f(monto).cambiarProba(proba)
     else this
   def aplanar() = Seq((SucesoGanancia(monto), proba))
 }
-case class ResultadoArbol(val Win: Resultado, val Lose: Resultado) extends Resultado {
-  def +(d: Double): Resultado = ResultadoArbol(Win + d, Lose + d)
-  def map(f: Apuesta): Resultado = ResultadoArbol(Win.map(f), Lose.map(f))
-  def aplanar() = Win.aplanar() ++ Lose.aplanar()
+case class ResultadoArbol(val Win: Resultado, val Lose: Resultado, val monto:Double=100.0) extends Resultado {
+  def cambiarProba(d:Double) = ResultadoArbol(Win, Lose, d)
+  def +(d: Double) = ResultadoArbol(Win + d, Lose + d)
+  def flatMap(f: Apuesta): Resultado = ResultadoArbol(Win.flatMap(f), Lose.flatMap(f), monto)
+  def aplanar() = (Win.aplanar() ++ Lose.aplanar()).map((p)=>(p._1, p._2*monto/100.0))
 }
