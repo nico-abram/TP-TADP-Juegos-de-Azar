@@ -30,7 +30,7 @@ class Apuesta_Test {
   }
   @Test
   def ApuestaCompuesta2_test() = {
-    val ResultadoArbol(ResultadoFinal(m1, p1), ResultadoArbol(ResultadoFinal(m2, p2),ResultadoFinal(m3, p3), p4), _) = apuestaCompuesta1(15.0)
+    val ResultadoArbol(ResultadoFinal(m1, p1), ResultadoArbol(ResultadoFinal(m2, p2), ResultadoFinal(m3, p3), p4), _) = apuestaCompuesta1(15.0)
     assertEquals(m1, 5.0, 0.05)
     assertEquals(m2, 10.0, 0.05)
     assertEquals(m3, 550.0, 0.05)
@@ -47,8 +47,8 @@ class Apuesta_Test {
     val Some(res2) = x.find(_._1.monto == 5)
     val Some(res3) = x.find(_._1.monto == 10)
     assertEquals(res2._2, Moneda.probabilidad(Cara()), 0.05)
-    assertEquals(Moneda.probabilidad(Cara())*Ruleta.probabilidad(Numero(0))/100.0, res1._2, 0.05)
-    assertEquals(Moneda.probabilidad(Cara())*(100.0 - Ruleta.probabilidad(Numero(0)))/100.0, res3._2, 0.05)
+    assertEquals(Moneda.probabilidad(Cara()) * Ruleta.probabilidad(Numero(0)) / 100.0, res1._2, 0.05)
+    assertEquals(Moneda.probabilidad(Cara()) * (100.0 - Ruleta.probabilidad(Numero(0))) / 100.0, res3._2, 0.05)
   }
 
 }
