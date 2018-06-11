@@ -1,4 +1,5 @@
 package com.tadp.utn.frba.c1_2018.grupo04
+import Suceso._
 
 trait JugadaRuleta extends Jugada {
   def ganancia(x: Double) = x * 2
@@ -11,7 +12,7 @@ case class Negro() extends JugadaRuleta
 case class Docena(docena: Int) extends JugadaRuleta {
   override def ganancia(x: Double) = x * 3
 }
-case class Numero(numero: Int) extends Suceso with JugadaRuleta {
+case class Numero(numero: Int) extends JugadaRuleta {
   override def ganancia(x: Double) = x * 36
 }
 

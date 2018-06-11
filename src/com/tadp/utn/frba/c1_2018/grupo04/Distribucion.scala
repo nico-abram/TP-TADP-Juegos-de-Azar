@@ -1,8 +1,11 @@
 package com.tadp.utn.frba.c1_2018.grupo04
 
-trait Suceso {}
+object Suceso { 
+  type Suceso = Any
+} 
+import Suceso._
 
-trait Distribucion extends Suceso {
+trait Distribucion {
   def SucesosPosibles(): Seq[Suceso]
   def Probabilidad(x: Suceso): Double
 }

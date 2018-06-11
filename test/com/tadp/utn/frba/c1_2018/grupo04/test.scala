@@ -18,11 +18,18 @@ class Apuesta_Test {
 
   @Test
   def ApuestaSimple1_test() = {
-    assertEquals(ResultadoArbol(ResultadoFinal(0.0, 50.0), ResultadoFinal(20.0, 50.0)), apuesta1(10.0))
+    assertEquals(
+      NodoArbol(
+        100.0,
+        NodoArbol(50.0, HojaArbol(0.0)),
+        NodoArbol(50.0, HojaArbol(20.0))): ArbolRaro[Double, Double],
+      apuesta1(10.0))
   }
   @Test
   def ApuestaSimple2_test() = {
-    val ResultadoArbol(ResultadoFinal(m1, p1), ResultadoFinal(m2, p2), _) = apuesta2(15.0)
+    val NodoArbol(_,
+      NodoArbol(p1, HojaArbol(m1)),
+      NodoArbol(p2, HojaArbol(m2))): ArbolRaro[Double, Double] = apuesta2(15.0)
     assertEquals(m1, 0.0, 0.05)
     assertEquals(m2, 540.0, 0.05)
     assertEquals(p1, 100.0 - Ruleta.probabilidad(Numero(0)), 0.05)
@@ -30,7 +37,13 @@ class Apuesta_Test {
   }
   @Test
   def ApuestaCompuesta2_test() = {
-    val ResultadoArbol(ResultadoFinal(m1, p1), ResultadoArbol(ResultadoFinal(m2, p2), ResultadoFinal(m3, p3), p4), _) = apuestaCompuesta1(15.0)
+    val NodoArbol(_,
+      NodoArbol(p1, HojaArbol(m1)),
+      NodoArbol(p4,
+        NodoArbol(_,
+          NodoArbol(p2, HojaArbol(m2)),
+          NodoArbol(p3, HojaArbol(m3))
+          ))): ArbolRaro[Double, Double] = apuestaCompuesta1(15.0)
     assertEquals(m1, 5.0, 0.05)
     assertEquals(m2, 10.0, 0.05)
     assertEquals(m3, 550.0, 0.05)
@@ -41,14 +54,16 @@ class Apuesta_Test {
   }
   @Test
   def AplanarResultado_test() = {
-    val x = apuestaCompuesta1(15.0).aplanar()
+    val x = apuestaCompuesta1.aplanada(15.0)
     assertEquals(3, x.length)
-    val Some(res1) = x.find(_._1.monto == 550)
-    val Some(res2) = x.find(_._1.monto == 5)
-    val Some(res3) = x.find(_._1.monto == 10)
+    val Some(res1) = x.find(_._1 == 550)
+    val Some(res2) = x.find(_._1 == 5)
+    val Some(res3) = x.find(_._1 == 10)
     assertEquals(res2._2, Moneda.probabilidad(Cara()), 0.05)
-    assertEquals(Moneda.probabilidad(Cara()) * Ruleta.probabilidad(Numero(0)) / 100.0, res1._2, 0.05)
-    assertEquals(Moneda.probabilidad(Cara()) * (100.0 - Ruleta.probabilidad(Numero(0))) / 100.0, res3._2, 0.05)
+    assertEquals(Moneda.probabilidad(Cara()) * Ruleta.probabilidad(Numero(0)) / 100.0, 
+      res1._2, 0.05)
+    assertEquals(Moneda.probabilidad(Cara()) * (100.0 - Ruleta.probabilidad(Numero(0))) / 100.0, 
+      res3._2, 0.05)
   }
 
 }

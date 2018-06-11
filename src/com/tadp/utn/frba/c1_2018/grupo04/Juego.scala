@@ -1,6 +1,7 @@
 package com.tadp.utn.frba.c1_2018.grupo04
+import Suceso._
 
-trait Jugada extends Suceso {
+trait Jugada {
   val juego: Juego
   def ganancia(monto: Double): Double
   def sucesoGanador(suceso: Suceso) = juego.sucesoGanador(suceso, this)
