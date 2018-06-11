@@ -32,8 +32,8 @@ class Apuesta_Test {
       NodoArbol(p2, HojaArbol(m2))): ArbolRaro[Double, Double] = apuesta2(15.0)
     assertEquals(m1, 0.0, 0.05)
     assertEquals(m2, 540.0, 0.05)
-    assertEquals(p1, 100.0 - Ruleta.probabilidad(Numero(0)), 0.05)
-    assertEquals(p2, Ruleta.probabilidad(Numero(0)), 0.05)
+    assertEquals(p1, 100.0 - Numero(0).probabilidad, 0.05)
+    assertEquals(p2, Numero(0).probabilidad, 0.05)
   }
   @Test
   def ApuestaCompuesta2_test() = {
@@ -47,10 +47,10 @@ class Apuesta_Test {
     assertEquals(m1, 5.0, 0.05)
     assertEquals(m2, 10.0, 0.05)
     assertEquals(m3, 550.0, 0.05)
-    assertEquals(p1, Moneda.probabilidad(Cara()), 0.05)
-    assertEquals(p2, 100.0 - Ruleta.probabilidad(Numero(0)), 0.05)
-    assertEquals(p3, Ruleta.probabilidad(Numero(0)), 0.05)
-    assertEquals(p4, Moneda.probabilidad(Cruz()), 0.05)
+    assertEquals(p1, Cara().probabilidad, 0.05)
+    assertEquals(p2, 100.0 - Numero(0).probabilidad, 0.05)
+    assertEquals(p3, Numero(0).probabilidad, 0.05)
+    assertEquals(p4, Cruz().probabilidad, 0.05)
   }
   @Test
   def AplanarResultado_test() = {
@@ -59,12 +59,12 @@ class Apuesta_Test {
     val Some(res1) = x.find(_._1 == 550)
     val Some(res2) = x.find(_._1 == 5)
     val Some(res3) = x.find(_._1 == 10)
-    assertEquals(res2._2, Moneda.probabilidad(Cara()), 0.05)
+    assertEquals(res2._2, Cara().probabilidad, 0.05)
     assertEquals(
-      Moneda.probabilidad(Cara()) * Ruleta.probabilidad(Numero(0)) / 100.0,
+      Cara().probabilidad * Numero(0).probabilidad / 100.0,
       res1._2, 0.05)
     assertEquals(
-      Moneda.probabilidad(Cara()) * (100.0 - Ruleta.probabilidad(Numero(0))) / 100.0,
+      Cara().probabilidad * (100.0 - Numero(0).probabilidad) / 100.0,
       res3._2, 0.05)
   }
 

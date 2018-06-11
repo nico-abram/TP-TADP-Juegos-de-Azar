@@ -1,7 +1,7 @@
 package com.tadp.utn.frba.c1_2018.grupo04
 import Suceso._
 
-trait JugadaRuleta extends Jugada {
+trait JugadaRuleta extends JugadaDeJuego {
   def ganancia(x: Double) = x * 2
   val juego = Ruleta
 }
@@ -18,10 +18,8 @@ case class Numero(numero: Int) extends JugadaRuleta {
 
 object Ruleta extends Juego {
   private val sucesos: Seq[JugadaRuleta] = Range(0, 36).map(Numero(_))
-  val d: Distribucion =
-    Equiprobable(sucesos)
-  def distribucion() = d
-  override def sucesoGanador(suceso: Suceso, resultado: Jugada) = resultado match {
+  val distribucion = Equiprobable(sucesos)
+  override def sucesoGanador(suceso: Suceso, resultado: Jugada): Boolean = resultado match {
     case Numero(i) => suceso match {
       case Par()   => i % 2 == 0
       case Impar() => !sucesoGanador(Par(), resultado)

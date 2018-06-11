@@ -10,14 +10,14 @@ trait Apuesta {
 case class ApuestaSimple(jugada: Jugada, monto: Double) extends Apuesta {
   def apply(montoInicial: Double): Resultado = {
     val (wins: Seq[Suceso], losses: Seq[Suceso]) =
-      jugada.resultadosPosibles().partition((suceso: Suceso) => jugada.sucesoGanador(suceso))
+      jugada.resultadosPosibles.partition((suceso: Suceso) => jugada.sucesoGanador(suceso))
     NodoArbol[Double, Double](
       100.0,
       NodoArbol(
-        losses.map(jugada.probabilidad(_)).sum,
+        losses.map(jugada.probabilidadDe(_)).sum,
         HojaArbol(-monto)),
       NodoArbol(
-        wins.map(jugada.probabilidad(_)).sum,
+        wins.map(jugada.probabilidadDe(_)).sum,
         HojaArbol(jugada.ganancia(monto) - monto))).map(montoInicial + _)
   }
 }
