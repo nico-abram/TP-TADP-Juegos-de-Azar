@@ -1,8 +1,8 @@
 package com.tadp.utn.frba.c1_2018.grupo04
 
-object Suceso { 
+object Suceso {
   type Suceso = Any
-} 
+}
 import Suceso._
 
 trait Distribucion {

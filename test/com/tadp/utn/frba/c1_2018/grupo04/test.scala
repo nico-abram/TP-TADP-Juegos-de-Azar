@@ -60,9 +60,11 @@ class Apuesta_Test {
     val Some(res2) = x.find(_._1 == 5)
     val Some(res3) = x.find(_._1 == 10)
     assertEquals(res2._2, Moneda.probabilidad(Cara()), 0.05)
-    assertEquals(Moneda.probabilidad(Cara()) * Ruleta.probabilidad(Numero(0)) / 100.0, 
+    assertEquals(
+      Moneda.probabilidad(Cara()) * Ruleta.probabilidad(Numero(0)) / 100.0,
       res1._2, 0.05)
-    assertEquals(Moneda.probabilidad(Cara()) * (100.0 - Ruleta.probabilidad(Numero(0))) / 100.0, 
+    assertEquals(
+      Moneda.probabilidad(Cara()) * (100.0 - Ruleta.probabilidad(Numero(0))) / 100.0,
       res3._2, 0.05)
   }
 
